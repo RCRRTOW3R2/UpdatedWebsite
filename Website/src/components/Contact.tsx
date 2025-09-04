@@ -25,7 +25,7 @@ export const Contact = () => {
             aria-label="Duolingo"
           >
             <img
-              src="/icons/duolingo.png"
+              src="icons/duolingo.png"
               alt="Duolingo"
               className="w-8 h-8 opacity-90 hover:opacity-100"
             />
@@ -51,7 +51,7 @@ export const Contact = () => {
             </svg>
           </a>
           <a
-            href="/resume.pdf"
+            href="documents/RESUME.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="text-[#7A9CA9] hover:text-[#F0F0E8] transition-colors"

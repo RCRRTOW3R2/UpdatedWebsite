@@ -1,17 +1,14 @@
-import { ProjectCard } from './ProjectCard';
-import { Slideshow } from './Slideshow';
-
 interface ExperienceItem {
   title: string;
   company?: string;
+  date: string;
   location?: string;
   description: string;
-  date: string;
   type: 'work' | 'education' | 'project' | 'research';
 }
 
 interface SkillCategory {
-  title: string;
+  name: string;
   skills: string[];
 }
 
@@ -22,7 +19,15 @@ export const Resume = () => {
       company: 'The University of Georgia',
       location: 'Athens, GA',
       description: 'Economics & International Affairs',
-      date: '2021 - Present',
+      date: '2023 - Present',
+      type: 'education'
+    },
+    {
+      title: 'Undergraduate Student',
+      company: 'Kennesaw State University',
+      location: 'Kennesaw, GA',
+      description: 'Economics',
+      date: '2020 - 2023',
       type: 'education'
     },
     {
@@ -37,7 +42,7 @@ export const Resume = () => {
       title: 'Price Analyst',
       company: 'Souto Foods',
       location: 'Norcross, GA',
-      description: 'As a Price Analyst Intern at Souto Foods, I aim to apply and expand my skills in data analysis and pricing strategy while gaining hands-on experience in the wholesale food industry. I look forward to contributing to cross-functional projects, supporting data-driven decisions, and learning how pricing impacts margins and market positioning.',
+      description: 'As a Pricing Intern at Souto Foods, I analyze market trends, competitor pricing, and consumer behavior to guide new product and vendor introductions. I design processes for data collection and modeling that highlight growth opportunities, monitor risks, and deliver actionable insights. Working closely with purchasing and sales teams, I help build pricing frameworks that integrate costs, market data, and competitive benchmarks, improving efficiency in sourcing and pricing decisions. I also develop dashboards to visualize KPIs and market segmentation, and support the adoption of new analytical tools through training and implementation.',
       date: 'Summer 2025',
       type: 'work'
     },
@@ -50,7 +55,9 @@ export const Resume = () => {
       type: 'research'
     },
     {
-      title: 'Portfolio Manager',
+      title: 'Portfolio Manager and Research Analyst',
+      company: 'Delta32 Investment Research & Trading Lab',
+      location: 'Atlanta, GA',
       description: 'Managed and provided strategic guidance for four stock portfolios, achieving over 160% cumulative returns over four years by adapting to market trends and leveraging data analysis to mitigate risk and enhance returns.\nConducted market research using analytical software and tracked current events using sentiment analysis to identify opportunities for portfolio improvement and mitigate risk.',
       date: '2020-present',
       type: 'project'
@@ -58,6 +65,12 @@ export const Resume = () => {
     {
       title: 'Tandem App',
       description: 'Built Tandem, a React Native app for social groups to track shared routines and aspects of their lives (meals, expenses, reminders, etc.) using Expo, Prisma, and PostgreSQL. Features include modular routing, real-time logging, and AI-driven recommendations to improve group cohesion and activities outside of social media.',
+      date: '2025',
+      type: 'project'
+    },
+    {
+      title: 'English Premier League Prophet',
+      description: 'Built a predictive model for the English Premier League using machine learning and data analysis. The model uses historical data to predict the outcome of matches and the likelihood of a team winning or losing.',
       date: '2025',
       type: 'project'
     },
@@ -71,25 +84,27 @@ export const Resume = () => {
 
   const skillCategories: SkillCategory[] = [
     {
-      title: "Languages",
+      name: "Languages",
       skills: [
         "Fluent in Spanish",
         "Conversational French",
         "Beginner in Russian",
         "Beginner in Italian",
         "Experience in Python",
+        "Experience in Power BI",
         "Experience in R",
       ]
     },
     {
-      title: "Interests & Hobbies",
+      name: "Interests & Hobbies",
       skills: [
         "Marathon Training",
         "Pokémon",
         "Vexillology",
-        "Reading Philosophy",
+        "Reading Philosophy and survivalism literature",
         "Football (Soccer)",
-        "Weightlifting"
+        "Weightlifting",
+        "Website and App Development"
       ]
     }
   ];
@@ -99,32 +114,10 @@ export const Resume = () => {
   const projects = experiences.filter(exp => exp.type === 'project');
   const research = experiences.filter(exp => exp.type === 'research');
 
-  const renderExperience = (experience: ExperienceItem) => (
-    <div key={experience.title + experience.date} className="mb-8">
-      <div className="flex justify-between items-start mb-2">
-        <div>
-          <h3 className="text-xl font-semibold text-[#F0F0E8]">
-            {experience.title}
-          </h3>
-          {experience.company && (
-            <p className="text-lg text-[#7A9CA9]">{experience.company}</p>
-          )}
-        </div>
-        <div className="text-right">
-          <span className="text-[#7A9CA9]">{experience.date}</span>
-          {experience.location && (
-            <p className="text-[#F0F0E8]/70 text-sm">{experience.location}</p>
-          )}
-        </div>
-      </div>
-      <p className="text-[#F0F0E8]/80 whitespace-pre-line">{experience.description}</p>
-    </div>
-  );
-
   const renderSkillCategory = (category: SkillCategory) => (
-    <div key={category.title} className="mb-2 last:mb-0">
+    <div key={category.name} className="mb-2 last:mb-0">
       <h4 className="text-xl font-semibold text-[#7A9CA9] mb-2">
-        {category.title}
+        {category.name}
       </h4>
       <ul className="space-y-1">
         {category.skills.map(skill => (

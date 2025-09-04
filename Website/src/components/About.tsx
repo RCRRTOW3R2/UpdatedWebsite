@@ -6,10 +6,7 @@ export const About = () => {
           About Me
         </h2>
         <p className="text-[#F0F0E8]/80 leading-relaxed text-lg text-center">
-          Originally from Mexico City, I'm now pursuing an economics degree at
-          The University of Georgia. My journey combines analytical thinking
-          with cultural exploration, as I navigate between academic excellence
-          and personal growth through various activities and interests.
+        Originally from Mexico City, I am pursuing an Economics degree at the University of Georgia. I thrive in dynamic environments where curiosity and analytical thinking guide my work. My academic journey has strengthened my ability to evaluate complex problems, while my cultural background has shaped my appreciation for diverse perspectives. I seek opportunities that challenge me to grow, adapt, and contribute through a balance of rigorous analysis and open-minded engagement.
         </p>
       </div>
     </section>

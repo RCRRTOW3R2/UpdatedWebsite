@@ -11,11 +11,10 @@ export const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <img
-              src="/icons/logoDMT.png"
+              src="icons/logoDMT.png"
               alt="DMT Logo"
               className="h-12 w-12"
             />
-            <span className="ml-2 text-lg font-semibold text-[#2C3E50]">DMT</span>
           </div>
           
           {/* Mobile menu button */}
