@@ -14,46 +14,15 @@ interface SkillCategory {
   skills: string[];
 }
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export const Resume = () => {
   const [openFolder, setOpenFolder] = useState<string | null>(null);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const [scrollDelta, setScrollDelta] = useState(0);
   const [expandedSkillSection, setExpandedSkillSection] = useState<string | null>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const delta = Math.abs(currentScrollY - lastScrollY);
-      
-      // Accumulate scroll delta
-      setScrollDelta(prev => prev + delta);
-      
-      // Close folder if user scrolls more than 300px (less sensitive for click-based interaction)
-      if (scrollDelta > 300 && openFolder) {
-        setOpenFolder(null);
-        setScrollDelta(0);
-      }
-      
-      setLastScrollY(currentScrollY);
-    };
-
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (!target.closest('.folder-container') && openFolder) {
-        setOpenFolder(null);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    document.addEventListener('click', handleClickOutside);
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [lastScrollY, scrollDelta, openFolder]);
+  const handleFolderClick = (folderName: string) => {
+    setOpenFolder(openFolder === folderName ? null : folderName);
+  };
 
   const toggleSkillSection = (section: string) => {
     setExpandedSkillSection(expandedSkillSection === section ? null : section);
@@ -339,34 +308,37 @@ export const Resume = () => {
         </div>
 
         {/* Project Portfolio Section */}
-        <div className="bg-gradient-to-r from-[#2C3E50] to-[#1A252F] py-20 px-4" id="project-portfolio">
+        <div className="bg-[#2C3E50] py-20 px-4" id="project-portfolio">
           <div className="max-w-6xl mx-auto">
             <h3 className="text-3xl font-bold text-[#F0F0E8] text-center mb-4">
               Project Portfolio
             </h3>
             <p className="text-center text-[#7A9CA9] mb-16 max-w-3xl mx-auto">
-              Scroll down to explore my projects - each folder contains detailed information about my work and achievements.
+              Click on each folder tab to explore my projects - each folder contains detailed information about my work and achievements.
             </p>
             
             <div className="relative max-w-4xl mx-auto">
               {/* Stack of project folders */}
-              <div className="relative">
+              <div className="relative space-y-12">
                 
                 {/* EPL Prophet Folder - Top */}
-                <div className="relative z-40 mb-2">
+                <div className="relative">
                   <div className="relative">
-                    {/* Folder Tab */}
-                    <div className="absolute -top-8 left-8 z-50">
-                      <div className="bg-gradient-to-r from-[#7A9CA9] to-[#7A9CA9]/80 rounded-t-lg px-6 py-2 transform rotate-1 shadow-lg border-2 border-[#7A9CA9]/30">
-                        <span className="text-[#F0F0E8] font-semibold text-sm">EPL Prophet</span>
+                    {/* Folder Tab - Matches folder color */}
+                    <div className="absolute -top-6 left-8 z-10">
+                      <div 
+                        className="bg-[#F0F0E8] border-l-4 border-t-4 border-r-4 border-[#2C3E50] rounded-t-lg px-6 py-2 shadow-lg cursor-pointer hover:bg-[#F0F0E8]/90 transition-colors duration-200"
+                        onClick={() => handleFolderClick('epl-prophet')}
+                      >
+                        <span className="text-[#2C3E50] font-semibold text-sm">EPL Prophet</span>
                       </div>
                     </div>
                     
                     {/* Folder Body */}
-                    <div className={`bg-gradient-to-br from-[#F4E4BC] to-[#E8D5A3] rounded-lg shadow-2xl border-4 border-[#8B7355] transition-all duration-700 ease-out transform ${
+                    <div className={`bg-[#F0F0E8] rounded-lg shadow-2xl border-4 border-[#2C3E50] transition-all duration-500 ease-out ${
                       openFolder === 'epl-prophet' 
-                        ? 'translate-y-0 opacity-100 scale-100' 
-                        : 'translate-y-4 opacity-95 scale-98'
+                        ? 'transform translate-y-0 scale-100 opacity-100' 
+                        : 'transform translate-y-2 scale-98 opacity-90'
                     }`}>
                       
                       {/* Folder Content */}
@@ -414,20 +386,23 @@ export const Resume = () => {
                   </div>
                   
                   {/* Tandem App Folder */}
-                  <div className="relative z-30 mb-2">
+                  <div className="relative">
                     <div className="relative">
-                      {/* Folder Tab */}
-                      <div className="absolute -top-8 right-8 z-50">
-                        <div className="bg-gradient-to-r from-[#7A9CA9] to-[#7A9CA9]/80 rounded-t-lg px-6 py-2 transform -rotate-1 shadow-lg border-2 border-[#7A9CA9]/30">
-                          <span className="text-[#F0F0E8] font-semibold text-sm">Tandem App</span>
+                      {/* Folder Tab - Matches folder color */}
+                      <div className="absolute -top-6 right-8 z-10">
+                        <div 
+                          className="bg-[#F0F0E8] border-l-4 border-t-4 border-r-4 border-[#2C3E50] rounded-t-lg px-6 py-2 shadow-lg cursor-pointer hover:bg-[#F0F0E8]/90 transition-colors duration-200"
+                          onClick={() => handleFolderClick('tandem-app')}
+                        >
+                          <span className="text-[#2C3E50] font-semibold text-sm">Tandem App</span>
                         </div>
                       </div>
                       
                       {/* Folder Body */}
-                      <div className={`bg-gradient-to-br from-[#F4E4BC] to-[#E8D5A3] rounded-lg shadow-2xl border-4 border-[#8B7355] transition-all duration-700 ease-out transform ${
+                      <div className={`bg-[#F0F0E8] rounded-lg shadow-2xl border-4 border-[#2C3E50] transition-all duration-500 ease-out ${
                         openFolder === 'tandem-app' 
-                          ? 'translate-y-0 opacity-100 scale-100' 
-                          : 'translate-y-6 opacity-90 scale-96'
+                          ? 'transform translate-y-0 scale-100 opacity-100' 
+                          : 'transform translate-y-2 scale-98 opacity-90'
                       }`}>
                         
                         {/* Folder Content */}
@@ -471,20 +446,23 @@ export const Resume = () => {
                   </div>
                   
                   {/* Vibe Coding Folder */}
-                  <div className="relative z-20 mb-2">
+                  <div className="relative">
                     <div className="relative">
-                      {/* Folder Tab */}
-                      <div className="absolute -top-8 left-16 z-50">
-                        <div className="bg-gradient-to-r from-[#7A9CA9] to-[#7A9CA9]/80 rounded-t-lg px-6 py-2 transform rotate-0.5 shadow-lg border-2 border-[#7A9CA9]/30">
-                          <span className="text-[#F0F0E8] font-semibold text-sm">Vibe Coding</span>
+                      {/* Folder Tab - Matches folder color */}
+                      <div className="absolute -top-6 left-16 z-10">
+                        <div 
+                          className="bg-[#F0F0E8] border-l-4 border-t-4 border-r-4 border-[#2C3E50] rounded-t-lg px-6 py-2 shadow-lg cursor-pointer hover:bg-[#F0F0E8]/90 transition-colors duration-200"
+                          onClick={() => handleFolderClick('vibe-coding')}
+                        >
+                          <span className="text-[#2C3E50] font-semibold text-sm">Vibe Coding</span>
                         </div>
                       </div>
                       
                       {/* Folder Body */}
-                      <div className={`bg-gradient-to-br from-[#F4E4BC] to-[#E8D5A3] rounded-lg shadow-2xl border-4 border-[#8B7355] transition-all duration-700 ease-out transform ${
+                      <div className={`bg-[#F0F0E8] rounded-lg shadow-2xl border-4 border-[#2C3E50] transition-all duration-500 ease-out ${
                         openFolder === 'vibe-coding' 
-                          ? 'translate-y-0 opacity-100 scale-100' 
-                          : 'translate-y-8 opacity-85 scale-94'
+                          ? 'transform translate-y-0 scale-100 opacity-100' 
+                          : 'transform translate-y-2 scale-98 opacity-90'
                       }`}>
                         
                         {/* Folder Content */}
@@ -528,20 +506,23 @@ export const Resume = () => {
                   </div>
                   
                   {/* Portfolio Site Folder - Bottom */}
-                  <div className="relative z-10">
+                  <div className="relative">
                     <div className="relative">
-                      {/* Folder Tab */}
-                      <div className="absolute -top-8 right-16 z-50">
-                        <div className="bg-gradient-to-r from-[#7A9CA9] to-[#7A9CA9]/80 rounded-t-lg px-6 py-2 transform -rotate-0.5 shadow-lg border-2 border-[#7A9CA9]/30">
-                          <span className="text-[#F0F0E8] font-semibold text-sm">Portfolio Site</span>
+                      {/* Folder Tab - Matches folder color */}
+                      <div className="absolute -top-6 right-16 z-10">
+                        <div 
+                          className="bg-[#F0F0E8] border-l-4 border-t-4 border-r-4 border-[#2C3E50] rounded-t-lg px-6 py-2 shadow-lg cursor-pointer hover:bg-[#F0F0E8]/90 transition-colors duration-200"
+                          onClick={() => handleFolderClick('portfolio-site')}
+                        >
+                          <span className="text-[#2C3E50] font-semibold text-sm">Portfolio Site</span>
                         </div>
                       </div>
                       
                       {/* Folder Body */}
-                      <div className={`bg-gradient-to-br from-[#F4E4BC] to-[#E8D5A3] rounded-lg shadow-2xl border-4 border-[#8B7355] transition-all duration-700 ease-out transform ${
+                      <div className={`bg-[#F0F0E8] rounded-lg shadow-2xl border-4 border-[#2C3E50] transition-all duration-500 ease-out ${
                         openFolder === 'portfolio-site' 
-                          ? 'translate-y-0 opacity-100 scale-100' 
-                          : 'translate-y-10 opacity-80 scale-92'
+                          ? 'transform translate-y-0 scale-100 opacity-100' 
+                          : 'transform translate-y-2 scale-98 opacity-90'
                       }`}>
                         
                         {/* Folder Content */}
