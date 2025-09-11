@@ -14,7 +14,51 @@ interface SkillCategory {
   skills: string[];
 }
 
+import { useState, useEffect } from 'react';
+
 export const Resume = () => {
+  const [openFolder, setOpenFolder] = useState<string | null>(null);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [scrollDelta, setScrollDelta] = useState(0);
+  const [expandedSkillSection, setExpandedSkillSection] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const delta = Math.abs(currentScrollY - lastScrollY);
+      
+      // Accumulate scroll delta
+      setScrollDelta(prev => prev + delta);
+      
+      // Close folder if user scrolls more than 300px (less sensitive for click-based interaction)
+      if (scrollDelta > 300 && openFolder) {
+        setOpenFolder(null);
+        setScrollDelta(0);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.folder-container') && openFolder) {
+        setOpenFolder(null);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    document.addEventListener('click', handleClickOutside);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [lastScrollY, scrollDelta, openFolder]);
+
+  const toggleSkillSection = (section: string) => {
+    setExpandedSkillSection(expandedSkillSection === section ? null : section);
+  };
+
   const timelineItems: TimelineItem[] = [
     // Birth/Early Life
     {
@@ -27,10 +71,19 @@ export const Resume = () => {
     // Education and Early Interests
     {
       year: 2018,
-      title: 'Started Marathon Training',
-      description: 'Developed passion for long-distance running, building discipline and endurance that translates to all aspects of life.',
+      title: 'French Language Learning',
+      description: 'Began learning French as my first foreign language beyond Spanish, developing conversational skills and cultural appreciation that would enhance my international perspective.',
       type: 'hobby' as const,
       side: 'left' as const
+    },
+    {
+      year: 2020,
+      title: 'High School Graduate',
+      company: 'Collins Hill High School',
+      location: 'Lawrenceville, GA',
+      description: 'Graduated from Collins Hill High School, preparing for the next chapter in higher education and personal development.',
+      type: 'education' as const,
+      side: 'right' as const
     },
     {
       year: 2020,
@@ -52,8 +105,8 @@ export const Resume = () => {
     },
     {
       year: 2021,
-      title: 'Language Learning Journey',
-      description: 'Began intensive language learning: achieving fluency in Spanish, conversational French, and starting Russian and Italian. This reflects my passion for connecting with different cultures.',
+      title: 'Soccer Player Journey',
+      description: 'Pursued competitive soccer playing from 2021-2023, developing teamwork, strategic thinking, and athletic discipline. This experience enhanced my ability to work under pressure and collaborate effectively in team environments.',
       type: 'hobby' as const,
       side: 'left' as const
     },
@@ -67,6 +120,13 @@ export const Resume = () => {
       side: 'right' as const
     },
     {
+      year: 2023,
+      title: 'Russian Language Learning',
+      description: 'Started learning Russian to expand my linguistic capabilities and cultural understanding. This new challenge demonstrates my commitment to continuous learning and global awareness.',
+      type: 'hobby' as const,
+      side: 'left' as const
+    },
+    {
       year: 2024,
       title: 'Undergraduate Research Assistant',
       company: 'SNARP',
@@ -77,16 +137,16 @@ export const Resume = () => {
     },
     {
       year: 2024,
-      title: 'Tandem App Development',
-      description: 'Built Tandem, a React Native app for social groups to track shared routines and aspects of their lives (meals, expenses, reminders, etc.) using Expo, Prisma, and PostgreSQL. Features include modular routing, real-time logging, and AI-driven recommendations.',
+      title: 'Vibe Coding Websites',
+      description: 'Spring 2024: Founded and launched Vibe Coding, developing professional websites for local and small businesses using modern web technologies. Focused on creating responsive, user-friendly designs that help businesses establish their digital presence and connect with customers.',
       type: 'project' as const,
       side: 'left' as const
     },
     {
       year: 2024,
-      title: 'Vexillology & Geography',
-      description: 'Developed deep interest in flags, geography, and geopolitics. This hobby enhances my international affairs studies and cultural understanding.',
-      type: 'hobby' as const,
+      title: 'Tandem App Development',
+      description: 'Built Tandem, a React Native app for social groups to track shared routines and aspects of their lives (meals, expenses, reminders, etc.) using Expo, Prisma, and PostgreSQL. Features include modular routing, real-time logging, and AI-driven recommendations.',
+      type: 'project' as const,
       side: 'left' as const
     },
     {
@@ -132,9 +192,7 @@ export const Resume = () => {
     {
       name: "Interests & Hobbies",
       skills: [
-        "Marathon Training",
         "Pokémon",
-        "Vexillology", 
         "Reading Philosophy",
         "Football (Soccer)",
         "Weightlifting"
@@ -280,6 +338,801 @@ export const Resume = () => {
           </div>
         </div>
 
+        {/* Project Portfolio Section */}
+        <div className="bg-gradient-to-r from-[#2C3E50] to-[#1A252F] py-20 px-4" id="project-portfolio">
+          <div className="max-w-6xl mx-auto">
+            <h3 className="text-3xl font-bold text-[#F0F0E8] text-center mb-4">
+              Project Portfolio
+            </h3>
+            <p className="text-center text-[#7A9CA9] mb-16 max-w-3xl mx-auto">
+              Scroll down to explore my projects - each folder contains detailed information about my work and achievements.
+            </p>
+            
+            <div className="relative max-w-4xl mx-auto">
+              {/* Stack of project folders */}
+              <div className="relative">
+                
+                {/* EPL Prophet Folder - Top */}
+                <div className="relative z-40 mb-2">
+                  <div className="relative">
+                    {/* Folder Tab */}
+                    <div className="absolute -top-8 left-8 z-50">
+                      <div className="bg-gradient-to-r from-[#7A9CA9] to-[#7A9CA9]/80 rounded-t-lg px-6 py-2 transform rotate-1 shadow-lg border-2 border-[#7A9CA9]/30">
+                        <span className="text-[#F0F0E8] font-semibold text-sm">EPL Prophet</span>
+                      </div>
+                    </div>
+                    
+                    {/* Folder Body */}
+                    <div className={`bg-gradient-to-br from-[#F4E4BC] to-[#E8D5A3] rounded-lg shadow-2xl border-4 border-[#8B7355] transition-all duration-700 ease-out transform ${
+                      openFolder === 'epl-prophet' 
+                        ? 'translate-y-0 opacity-100 scale-100' 
+                        : 'translate-y-4 opacity-95 scale-98'
+                    }`}>
+                      
+                      {/* Folder Content */}
+                      <div className={`transition-all duration-700 ease-out overflow-hidden ${
+                        openFolder === 'epl-prophet' 
+                          ? 'max-h-96 opacity-100 p-6' 
+                          : 'max-h-16 opacity-60 p-4'
+                      }`}>
+                        
+                        {openFolder === 'epl-prophet' && (
+                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+                            <div className="space-y-4">
+                              <h4 className="text-2xl font-bold text-[#2C3E50] mb-3">EPL Prophet</h4>
+                              <p className="text-[#2C3E50] leading-relaxed">
+                                Built a predictive model for the English Premier League using machine learning and data analysis. 
+                                The model uses historical data to predict match outcomes with 50.4% accuracy across 4,181 matches.
+                              </p>
+                              <a 
+                                href="https://rcrrtow3r2.github.io/EPL_PROPHET/#prediction" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center px-4 py-2 bg-[#2C3E50] text-[#F0F0E8] rounded-lg hover:bg-[#34495E] transition-colors duration-200"
+                              >
+                                View Project
+                                <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                              </a>
+                            </div>
+                            <div className="flex justify-center">
+                              <img 
+                                src="assets/indigoleague1.png" 
+                                alt="EPL Prophet Preview" 
+                                className="w-48 h-32 object-cover rounded-lg shadow-lg border-2 border-[#2C3E50]/20"
+                              />
+                            </div>
+                          </div>
+                        )}
+                        
+                        {openFolder !== 'epl-prophet' && (
+                          <div className="text-[#2C3E50] font-semibold opacity-70">EPL Prophet - ML Prediction Model</div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Tandem App Folder */}
+                  <div className="relative z-30 mb-2">
+                    <div className="relative">
+                      {/* Folder Tab */}
+                      <div className="absolute -top-8 right-8 z-50">
+                        <div className="bg-gradient-to-r from-[#7A9CA9] to-[#7A9CA9]/80 rounded-t-lg px-6 py-2 transform -rotate-1 shadow-lg border-2 border-[#7A9CA9]/30">
+                          <span className="text-[#F0F0E8] font-semibold text-sm">Tandem App</span>
+                        </div>
+                      </div>
+                      
+                      {/* Folder Body */}
+                      <div className={`bg-gradient-to-br from-[#F4E4BC] to-[#E8D5A3] rounded-lg shadow-2xl border-4 border-[#8B7355] transition-all duration-700 ease-out transform ${
+                        openFolder === 'tandem-app' 
+                          ? 'translate-y-0 opacity-100 scale-100' 
+                          : 'translate-y-6 opacity-90 scale-96'
+                      }`}>
+                        
+                        {/* Folder Content */}
+                        <div className={`transition-all duration-700 ease-out overflow-hidden ${
+                          openFolder === 'tandem-app' 
+                            ? 'max-h-96 opacity-100 p-6' 
+                            : 'max-h-16 opacity-60 p-4'
+                        }`}>
+                          
+                          {openFolder === 'tandem-app' && (
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+                              <div className="space-y-4">
+                                <h4 className="text-2xl font-bold text-[#2C3E50] mb-3">Tandem App</h4>
+                                <p className="text-[#2C3E50] leading-relaxed">
+                                  A comprehensive language learning platform that connects users with native speakers for 
+                                  real-time conversation practice and cultural exchange.
+                                </p>
+                                <div className="inline-flex items-center px-4 py-2 bg-gray-400 text-[#F0F0E8] rounded-lg cursor-not-allowed opacity-70">
+                                  Project Demo
+                                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div className="flex justify-center">
+                                <img 
+                                  src="assets/indigoleague1.png" 
+                                  alt="Tandem App Preview" 
+                                  className="w-48 h-32 object-cover rounded-lg shadow-lg border-2 border-[#2C3E50]/20"
+                                />
+                              </div>
+                            </div>
+                          )}
+                          
+                          {openFolder !== 'tandem-app' && (
+                            <div className="text-[#2C3E50] font-semibold opacity-70">Tandem App - Language Learning Platform</div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Vibe Coding Folder */}
+                  <div className="relative z-20 mb-2">
+                    <div className="relative">
+                      {/* Folder Tab */}
+                      <div className="absolute -top-8 left-16 z-50">
+                        <div className="bg-gradient-to-r from-[#7A9CA9] to-[#7A9CA9]/80 rounded-t-lg px-6 py-2 transform rotate-0.5 shadow-lg border-2 border-[#7A9CA9]/30">
+                          <span className="text-[#F0F0E8] font-semibold text-sm">Vibe Coding</span>
+                        </div>
+                      </div>
+                      
+                      {/* Folder Body */}
+                      <div className={`bg-gradient-to-br from-[#F4E4BC] to-[#E8D5A3] rounded-lg shadow-2xl border-4 border-[#8B7355] transition-all duration-700 ease-out transform ${
+                        openFolder === 'vibe-coding' 
+                          ? 'translate-y-0 opacity-100 scale-100' 
+                          : 'translate-y-8 opacity-85 scale-94'
+                      }`}>
+                        
+                        {/* Folder Content */}
+                        <div className={`transition-all duration-700 ease-out overflow-hidden ${
+                          openFolder === 'vibe-coding' 
+                            ? 'max-h-96 opacity-100 p-6' 
+                            : 'max-h-16 opacity-60 p-4'
+                        }`}>
+                          
+                          {openFolder === 'vibe-coding' && (
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+                              <div className="space-y-4">
+                                <h4 className="text-2xl font-bold text-[#2C3E50] mb-3">Vibe Coding</h4>
+                                <p className="text-[#2C3E50] leading-relaxed">
+                                  Custom website development business focused on creating modern, responsive websites 
+                                  for small businesses and personal brands.
+                                </p>
+                                <div className="inline-flex items-center px-4 py-2 bg-gray-400 text-[#F0F0E8] rounded-lg cursor-not-allowed opacity-70">
+                                  Business Portfolio
+                                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div className="flex justify-center">
+                                <img 
+                                  src="assets/indigoleague1.png" 
+                                  alt="Vibe Coding Preview" 
+                                  className="w-48 h-32 object-cover rounded-lg shadow-lg border-2 border-[#2C3E50]/20"
+                                />
+                              </div>
+                            </div>
+                          )}
+                          
+                          {openFolder !== 'vibe-coding' && (
+                            <div className="text-[#2C3E50] font-semibold opacity-70">Vibe Coding - Web Development Business</div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Portfolio Site Folder - Bottom */}
+                  <div className="relative z-10">
+                    <div className="relative">
+                      {/* Folder Tab */}
+                      <div className="absolute -top-8 right-16 z-50">
+                        <div className="bg-gradient-to-r from-[#7A9CA9] to-[#7A9CA9]/80 rounded-t-lg px-6 py-2 transform -rotate-0.5 shadow-lg border-2 border-[#7A9CA9]/30">
+                          <span className="text-[#F0F0E8] font-semibold text-sm">Portfolio Site</span>
+                        </div>
+                      </div>
+                      
+                      {/* Folder Body */}
+                      <div className={`bg-gradient-to-br from-[#F4E4BC] to-[#E8D5A3] rounded-lg shadow-2xl border-4 border-[#8B7355] transition-all duration-700 ease-out transform ${
+                        openFolder === 'portfolio-site' 
+                          ? 'translate-y-0 opacity-100 scale-100' 
+                          : 'translate-y-10 opacity-80 scale-92'
+                      }`}>
+                        
+                        {/* Folder Content */}
+                        <div className={`transition-all duration-700 ease-out overflow-hidden ${
+                          openFolder === 'portfolio-site' 
+                            ? 'max-h-96 opacity-100 p-6' 
+                            : 'max-h-16 opacity-60 p-4'
+                        }`}>
+                          
+                          {openFolder === 'portfolio-site' && (
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+                              <div className="space-y-4">
+                                <h4 className="text-2xl font-bold text-[#2C3E50] mb-3">Portfolio Site</h4>
+                                <p className="text-[#2C3E50] leading-relaxed">
+                                  This very website! Built with React, TypeScript, and Tailwind CSS featuring 
+                                  interactive timeline, RPG-style skill dashboard, and responsive design.
+                                </p>
+                                <div className="inline-flex items-center px-4 py-2 bg-[#2C3E50] text-[#F0F0E8] rounded-lg">
+                                  <span>You're Here!</span>
+                                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div className="flex justify-center">
+                                <img 
+                                  src="assets/indigoleague1.png" 
+                                  alt="Portfolio Site Preview" 
+                                  className="w-48 h-32 object-cover rounded-lg shadow-lg border-2 border-[#2C3E50]/20"
+                                />
+                              </div>
+                            </div>
+                          )}
+                          
+                          {openFolder !== 'portfolio-site' && (
+                            <div className="text-[#2C3E50] font-semibold opacity-70">Portfolio Site - This Website</div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+
+        {/* Videogame Style Skills Dashboard */}
+        <div className="mt-32">
+          <h3 className="text-3xl font-semibold text-[#7A9CA9] mb-12 text-center">
+            Character Stats & Skills
+          </h3>
+          
+          <div className="bg-gradient-to-r from-[#2C3E50] to-[#1A252F] py-20 px-4">
+            <div className="max-w-7xl mx-auto">
+              <h3 className="text-3xl font-bold text-[#F0F0E8] text-center mb-4">
+                Character Stats & Skills
+              </h3>
+              <p className="text-center text-[#7A9CA9] mb-16 max-w-3xl mx-auto">
+                My personal achievements compared to average benchmarks - see how I stack up across different skill categories.
+              </p>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                {/* Left side - Character */}
+                <div className="flex flex-col items-center">
+                  <div className="bg-[#F0F0E8] rounded-xl p-8 shadow-xl border-2 border-[#7A9CA9]/30">
+                    <h4 className="text-xl font-bold text-[#2C3E50] text-center mb-6">Character Profile</h4>
+                    
+                    {/* Stick Figure */}
+                    <div className="flex justify-center mb-6">
+                      <svg width="120" height="160" viewBox="0 0 120 160" className="text-[#2C3E50]">
+                        {/* Head */}
+                        <circle cx="60" cy="20" r="15" fill="none" stroke="currentColor" strokeWidth="3"/>
+                        {/* Body */}
+                        <line x1="60" y1="35" x2="60" y2="90" stroke="currentColor" strokeWidth="3"/>
+                        {/* Arms */}
+                        <line x1="60" y1="50" x2="40" y2="70" stroke="currentColor" strokeWidth="3"/>
+                        <line x1="60" y1="50" x2="80" y2="70" stroke="currentColor" strokeWidth="3"/>
+                        {/* Legs */}
+                        <line x1="60" y1="90" x2="45" y2="130" stroke="currentColor" strokeWidth="3"/>
+                        <line x1="60" y1="90" x2="75" y2="130" stroke="currentColor" strokeWidth="3"/>
+                        {/* Feet */}
+                        <line x1="45" y1="130" x2="35" y2="135" stroke="currentColor" strokeWidth="3"/>
+                        <line x1="75" y1="130" x2="85" y2="135" stroke="currentColor" strokeWidth="3"/>
+                      </svg>
+                    </div>
+                    
+                    {/* Character Info */}
+                    <div className="space-y-3 text-center">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[#2C3E50] font-medium">Level:</span>
+                        <span className="text-[#7A9CA9] font-bold">25</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-[#2C3E50] font-medium">Class:</span>
+                        <span className="text-[#7A9CA9] font-bold">Data Analyst</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-[#2C3E50] font-medium">Location:</span>
+                        <span className="text-[#7A9CA9] font-bold">Atlanta, GA</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Right side - Skills */}
+                <div className="space-y-6">
+                  
+                  {/* Languages */}
+                  <div className="border border-[#7A9CA9]/30 rounded-lg overflow-hidden">
+                    <div 
+                      className="bg-[#2C3E50] px-4 py-3 cursor-pointer hover:bg-[#34495E] transition-colors duration-200"
+                      onClick={() => toggleSkillSection('languages')}
+                    >
+                      <h5 className="text-lg font-semibold text-[#7A9CA9] flex items-center justify-between">
+                        Languages
+                        <span className="text-sm">
+                          {expandedSkillSection === 'languages' ? '−' : '+'}
+                        </span>
+                      </h5>
+                    </div>
+                    
+                    {expandedSkillSection === 'languages' && (
+                      <div className="bg-[#1E2A3B] p-4 space-y-4">
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-xs text-[#F0F0E8]">
+                            <span>Spanish (Native) - 559M speakers worldwide</span>
+                            <span className="text-emerald-400">Top 4 language</span>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="w-20 text-sm text-[#F0F0E8] font-medium">Spanish</div>
+                            <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                              <div className="bg-gradient-to-r from-emerald-500 to-emerald-400 h-4 rounded-full transition-all duration-1000" style={{ width: '100%' }}></div>
+                              <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">100</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-xs text-[#F0F0E8]">
+                            <span>English (Native) - 1.5B speakers worldwide</span>
+                            <span className="text-emerald-400">Global lingua franca</span>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="w-20 text-sm text-[#F0F0E8] font-medium">English</div>
+                            <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                              <div className="bg-gradient-to-r from-emerald-500 to-emerald-400 h-4 rounded-full transition-all duration-1000" style={{ width: '100%' }}></div>
+                              <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">100</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-xs text-[#F0F0E8]">
+                            <span>French (B2 level) - 280M speakers worldwide</span>
+                            <span className="text-blue-400">6 years learning</span>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="w-20 text-sm text-[#F0F0E8] font-medium">French</div>
+                            <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                              <div className="bg-gradient-to-r from-emerald-500 to-emerald-400 h-4 rounded-full transition-all duration-1000" style={{ width: '67%' }}></div>
+                              <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">67</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-xs text-[#F0F0E8]">
+                            <span>Russian (A2 level) - 258M speakers worldwide</span>
+                            <span className="text-yellow-400">2 years learning</span>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="w-20 text-sm text-[#F0F0E8] font-medium">Russian</div>
+                            <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                              <div className="bg-gradient-to-r from-emerald-500 to-emerald-400 h-4 rounded-full transition-all duration-1000" style={{ width: '30%' }}></div>
+                              <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">30</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Health & Fitness */}
+                  <div className="border border-[#7A9CA9]/30 rounded-lg overflow-hidden">
+                    <div 
+                      className="bg-[#2C3E50] px-4 py-3 cursor-pointer hover:bg-[#34495E] transition-colors duration-200"
+                      onClick={() => toggleSkillSection('health')}
+                    >
+                      <h5 className="text-lg font-semibold text-[#7A9CA9] flex items-center justify-between">
+                        Health & Fitness vs Average
+                        <span className="text-sm">
+                          {expandedSkillSection === 'health' ? '−' : '+'}
+                        </span>
+                      </h5>
+                    </div>
+                    
+                    {expandedSkillSection === 'health' && (
+                      <div className="bg-[#1E2A3B] p-4 space-y-4">
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-xs text-[#F0F0E8]">
+                            <span>5K Time: 28:12 vs 34:33 avg</span>
+                            <span className="text-emerald-400">18% faster</span>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="w-20 text-sm text-[#F0F0E8] font-medium">5K Speed</div>
+                            <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                              <div className="bg-gradient-to-r from-red-500 to-red-400 h-4 rounded-full transition-all duration-1000" style={{ width: '82%' }}></div>
+                              <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">82</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-xs text-[#F0F0E8]">
+                            <span>Half Marathon: 2:08:40 vs 2:30:00 avg</span>
+                            <span className="text-emerald-400">14% faster</span>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="w-20 text-sm text-[#F0F0E8] font-medium">Endurance</div>
+                            <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                              <div className="bg-gradient-to-r from-red-500 to-red-400 h-4 rounded-full transition-all duration-1000" style={{ width: '86%' }}></div>
+                              <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">86</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-xs text-[#F0F0E8]">
+                            <span>VO2 Max: 53 vs 42 avg</span>
+                            <span className="text-emerald-400">26% higher</span>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="w-20 text-sm text-[#F0F0E8] font-medium">Cardio Fitness</div>
+                            <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                              <div className="bg-gradient-to-r from-red-500 to-red-400 h-4 rounded-full transition-all duration-1000" style={{ width: '89%' }}></div>
+                              <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">89</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-xs text-[#F0F0E8]">
+                            <span>Bench Press: 265 lbs vs 160 lbs avg</span>
+                            <span className="text-emerald-400">66% stronger</span>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="w-20 text-sm text-[#F0F0E8] font-medium">Upper Strength</div>
+                            <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                              <div className="bg-gradient-to-r from-red-500 to-red-400 h-4 rounded-full transition-all duration-1000" style={{ width: '95%' }}></div>
+                              <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">95</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-xs text-[#F0F0E8]">
+                            <span>Pull-ups: 24 vs 8 avg</span>
+                            <span className="text-emerald-400">3x stronger</span>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="w-20 text-sm text-[#F0F0E8] font-medium">Pull Strength</div>
+                            <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                              <div className="bg-gradient-to-r from-red-500 to-red-400 h-4 rounded-full transition-all duration-1000" style={{ width: '92%' }}></div>
+                              <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">92</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Technical Skills */}
+                  <div className="border border-[#7A9CA9]/30 rounded-lg overflow-hidden">
+                    <div 
+                      className="bg-[#2C3E50] px-4 py-3 cursor-pointer hover:bg-[#34495E] transition-colors duration-200"
+                      onClick={() => toggleSkillSection('technical')}
+                    >
+                      <h5 className="text-lg font-semibold text-[#7A9CA9] flex items-center justify-between">
+                        Technical Skills
+                        <span className="text-sm">
+                          {expandedSkillSection === 'technical' ? '−' : '+'}
+                        </span>
+                      </h5>
+                    </div>
+                    
+                    {expandedSkillSection === 'technical' && (
+                      <div className="bg-[#1E2A3B] p-4 space-y-4">
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-xs text-[#F0F0E8]">
+                            <span>R - 2 years academic experience</span>
+                            <span className="text-blue-400">University level</span>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="w-20 text-sm text-[#F0F0E8] font-medium">R</div>
+                            <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                              <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-4 rounded-full transition-all duration-1000" style={{ width: '75%' }}></div>
+                              <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">75</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-xs text-[#F0F0E8]">
+                            <span>Python - 2 years self-taught</span>
+                            <span className="text-emerald-400">Intermediate</span>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="w-20 text-sm text-[#F0F0E8] font-medium">Python</div>
+                            <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                              <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-4 rounded-full transition-all duration-1000" style={{ width: '70%' }}></div>
+                              <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">70</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-xs text-[#F0F0E8]">
+                            <span>Excel - 3 years experience</span>
+                            <span className="text-green-400">Advanced</span>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="w-20 text-sm text-[#F0F0E8] font-medium">Excel</div>
+                            <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                              <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-4 rounded-full transition-all duration-1000" style={{ width: '85%' }}></div>
+                              <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">85</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-xs text-[#F0F0E8]">
+                            <span>Power BI - Summer intensive learning</span>
+                            <span className="text-blue-400">Beginner+</span>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="w-20 text-sm text-[#F0F0E8] font-medium">Power BI</div>
+                            <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                              <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-4 rounded-full transition-all duration-1000" style={{ width: '55%' }}></div>
+                              <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">55</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-xs text-[#F0F0E8]">
+                            <span>React - Vibe coding projects</span>
+                            <span className="text-purple-400">Experimental</span>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="w-20 text-sm text-[#F0F0E8] font-medium">React</div>
+                            <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                              <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-4 rounded-full transition-all duration-1000" style={{ width: '45%' }}></div>
+                              <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">45</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-xs text-[#F0F0E8]">
+                            <span>JavaScript/CSS - Vibe coding projects</span>
+                            <span className="text-purple-400">Experimental</span>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="w-20 text-sm text-[#F0F0E8] font-medium">JS/CSS</div>
+                            <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                              <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-4 rounded-full transition-all duration-1000" style={{ width: '40%' }}></div>
+                              <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">40</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Hobbies */}
+                  <div className="border border-[#7A9CA9]/30 rounded-lg overflow-hidden">
+                    <div 
+                      className="bg-[#2C3E50] px-4 py-3 cursor-pointer hover:bg-[#34495E] transition-colors duration-200"
+                      onClick={() => toggleSkillSection('hobbies')}
+                    >
+                      <h5 className="text-lg font-semibold text-[#7A9CA9] flex items-center justify-between">
+                        Hobbies & Interests
+                        <span className="text-sm">
+                          {expandedSkillSection === 'hobbies' ? '−' : '+'}
+                        </span>
+                      </h5>
+                    </div>
+                    
+                    {expandedSkillSection === 'hobbies' && (
+                      <div className="bg-[#1E2A3B] p-4 space-y-4">
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">Pokémon</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-4 rounded-full transition-all duration-1000" style={{ width: '95%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">95</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">Reading</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-4 rounded-full transition-all duration-1000" style={{ width: '80%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">80</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">Football</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-4 rounded-full transition-all duration-1000" style={{ width: '85%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">85</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">Car Mechanic</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-4 rounded-full transition-all duration-1000" style={{ width: '70%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">70</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">Cooking</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-4 rounded-full transition-all duration-1000" style={{ width: '75%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">75</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Attributes */}
+                  <div className="border border-[#7A9CA9]/30 rounded-lg overflow-hidden">
+                    <div 
+                      className="bg-[#2C3E50] px-4 py-3 cursor-pointer hover:bg-[#34495E] transition-colors duration-200"
+                      onClick={() => toggleSkillSection('attributes')}
+                    >
+                      <h5 className="text-lg font-semibold text-[#7A9CA9] flex items-center justify-between">
+                        Attributes
+                        <span className="text-sm">
+                          {expandedSkillSection === 'attributes' ? '−' : '+'}
+                        </span>
+                      </h5>
+                    </div>
+                    
+                    {expandedSkillSection === 'attributes' && (
+                      <div className="bg-[#1E2A3B] p-4 space-y-4">
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">Leadership</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-yellow-500 to-yellow-400 h-4 rounded-full transition-all duration-1000" style={{ width: '82%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">82</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">Teamwork</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-yellow-500 to-yellow-400 h-4 rounded-full transition-all duration-1000" style={{ width: '88%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">88</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">Problem Solving</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-yellow-500 to-yellow-400 h-4 rounded-full transition-all duration-1000" style={{ width: '92%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">92</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">Adaptability</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-yellow-500 to-yellow-400 h-4 rounded-full transition-all duration-1000" style={{ width: '89%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">89</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Data Analysis */}
+                  <div className="border border-[#7A9CA9]/30 rounded-lg overflow-hidden">
+                    <div 
+                      className="bg-[#2C3E50] px-4 py-3 cursor-pointer hover:bg-[#34495E] transition-colors duration-200"
+                      onClick={() => toggleSkillSection('data')}
+                    >
+                      <h5 className="text-lg font-semibold text-[#7A9CA9] flex items-center justify-between">
+                        Data Analysis
+                        <span className="text-sm">
+                          {expandedSkillSection === 'data' ? '−' : '+'}
+                        </span>
+                      </h5>
+                    </div>
+                    
+                    {expandedSkillSection === 'data' && (
+                      <div className="bg-[#1E2A3B] p-4 space-y-4">
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">Excel</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-green-500 to-green-400 h-4 rounded-full transition-all duration-1000" style={{ width: '90%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">90</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">SQL</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-green-500 to-green-400 h-4 rounded-full transition-all duration-1000" style={{ width: '70%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">70</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">Machine Learning</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-green-500 to-green-400 h-4 rounded-full transition-all duration-1000" style={{ width: '72%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">72</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">Statistics</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-green-500 to-green-400 h-4 rounded-full transition-all duration-1000" style={{ width: '78%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">78</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* My Teams */}
+                  <div className="border border-[#7A9CA9]/30 rounded-lg overflow-hidden">
+                    <div 
+                      className="bg-[#2C3E50] px-4 py-3 cursor-pointer hover:bg-[#34495E] transition-colors duration-200"
+                      onClick={() => toggleSkillSection('teams')}
+                    >
+                      <h5 className="text-lg font-semibold text-[#7A9CA9] flex items-center justify-between">
+                        My Teams
+                        <span className="text-sm">
+                          {expandedSkillSection === 'teams' ? '−' : '+'}
+                        </span>
+                      </h5>
+                    </div>
+                    
+                    {expandedSkillSection === 'teams' && (
+                      <div className="bg-[#1E2A3B] p-4 space-y-4">
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">NEW EIC</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-4 rounded-full transition-all duration-1000" style={{ width: '95%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">95</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">Souto Foods</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-4 rounded-full transition-all duration-1000" style={{ width: '90%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">90</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">SNARP</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-4 rounded-full transition-all duration-1000" style={{ width: '88%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">88</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 text-sm text-[#F0F0E8] font-medium">Delta32</div>
+                          <div className="flex-1 bg-[#1E2A3B] rounded-full h-4 relative">
+                            <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-4 rounded-full transition-all duration-1000" style={{ width: '92%' }}></div>
+                            <span className="absolute right-2 top-0 text-xs text-[#F0F0E8] leading-4">92</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         {/* Skills section at bottom */}
         <div className="mt-20">
           <h3 className="text-2xl font-semibold text-[#7A9CA9] mb-6 text-center">
@@ -293,6 +1146,8 @@ export const Resume = () => {
             </div>
           </div>
         </div>
+      </div>
+      </div>
       </div>
     </section>
   );
