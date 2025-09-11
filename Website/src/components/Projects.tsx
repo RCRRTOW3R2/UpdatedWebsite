@@ -9,11 +9,6 @@ interface TimelineItem {
   link?: string;
 }
 
-interface SkillCategory {
-  name: string;
-  skills: string[];
-}
-
 import { useState } from 'react';
 
 export const Resume = () => {
@@ -146,50 +141,6 @@ export const Resume = () => {
     }
   ].sort((a, b) => a.year - b.year);
 
-  const skillCategories: SkillCategory[] = [
-    {
-      name: "Languages",
-      skills: [
-        "Fluent in Spanish",
-        "Conversational French", 
-        "Beginner in Russian",
-        "Beginner in Italian",
-        "Experience in Python",
-        "Experience in R",
-      ]
-    },
-    {
-      name: "Interests & Hobbies",
-      skills: [
-        "Pokémon",
-        "Reading Philosophy",
-        "Football (Soccer)",
-        "Weightlifting"
-      ]
-    }
-  ];
-
-  const renderSkillCategory = (category: SkillCategory) => (
-    <div key={category.name} className="mb-2 last:mb-0">
-      <h4 className="text-xl font-semibold text-[#7A9CA9] mb-2">
-        {category.name}
-      </h4>
-      <ul className="space-y-1">
-        {category.skills.map(skill => (
-          <li
-            key={skill}
-            className="flex items-center text-[#F0F0E8] hover:text-[#7A9CA9] transition-colors duration-200"
-          >
-            <span className="mr-2 text-[#7A9CA9]">•</span>
-            <span className="text-base">
-              {skill}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-
   const getTypeColor = (type: string) => {
     switch (type) {
       case 'work': return 'bg-green-500';
@@ -307,6 +258,9 @@ export const Resume = () => {
           </div>
         </div>
 
+        {/* Gradient Separator */}
+        <div className="h-4 bg-gradient-to-r from-[#2C3E50] via-[#7A9CA9] to-[#2C3E50]"></div>
+
         {/* Project Portfolio Section */}
         <div className="bg-[#2C3E50] py-20 px-4" id="project-portfolio">
           <div className="max-w-6xl mx-auto">
@@ -314,7 +268,7 @@ export const Resume = () => {
               Project Portfolio
             </h3>
             <p className="text-center text-[#7A9CA9] mb-16 max-w-3xl mx-auto">
-              Click on each folder tab to explore my projects - each folder contains detailed information about my work and achievements.
+              Click anywhere on each folder to explore my projects - each folder contains detailed information about my work and achievements.
             </p>
             
             <div className="relative max-w-4xl mx-auto">
@@ -324,16 +278,6 @@ export const Resume = () => {
                 {/* EPL Prophet Folder - Top */}
                 <div className="relative">
                   <div className="relative">
-                    {/* Folder Tab - Matches folder color */}
-                    <div className="absolute -top-6 left-8 z-10">
-                      <div 
-                        className="bg-[#F0F0E8] border-l-4 border-t-4 border-r-4 border-[#2C3E50] rounded-t-lg px-6 py-2 shadow-lg cursor-pointer hover:bg-[#F0F0E8]/90 transition-colors duration-200"
-                        onClick={() => handleFolderClick('epl-prophet')}
-                      >
-                        <span className="text-[#2C3E50] font-semibold text-sm">EPL Prophet</span>
-                      </div>
-                    </div>
-                    
                     {/* Folder Body */}
                     <div className={`bg-[#F0F0E8] rounded-lg shadow-2xl border-4 border-[#2C3E50] transition-all duration-500 ease-out ${
                       openFolder === 'epl-prophet' 
@@ -342,13 +286,13 @@ export const Resume = () => {
                     }`}>
                       
                       {/* Folder Content */}
-                      <div className={`transition-all duration-700 ease-out overflow-hidden ${
+                      <div className={`transition-all duration-500 ease-out overflow-hidden ${
                         openFolder === 'epl-prophet' 
-                          ? 'max-h-96 opacity-100 p-6' 
-                          : 'max-h-16 opacity-60 p-4'
+                          ? 'max-h-96 opacity-100 p-8' 
+                          : 'max-h-16 opacity-70 p-4'
                       }`}>
                         
-                        {openFolder === 'epl-prophet' && (
+                        {openFolder === 'epl-prophet' ? (
                           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
                             <div className="space-y-4">
                               <h4 className="text-2xl font-bold text-[#2C3E50] mb-3">EPL Prophet</h4>
@@ -360,7 +304,7 @@ export const Resume = () => {
                                 href="https://rcrrtow3r2.github.io/EPL_PROPHET/#prediction" 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center px-4 py-2 bg-[#2C3E50] text-[#F0F0E8] rounded-lg hover:bg-[#34495E] transition-colors duration-200"
+                                className="inline-flex items-center px-4 py-2 bg-[#7A9CA9] text-[#F0F0E8] rounded-lg hover:bg-[#7A9CA9]/80 transition-colors duration-200"
                               >
                                 View Project
                                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -376,10 +320,13 @@ export const Resume = () => {
                               />
                             </div>
                           </div>
-                        )}
-                        
-                        {openFolder !== 'epl-prophet' && (
-                          <div className="text-[#2C3E50] font-semibold opacity-70">EPL Prophet - ML Prediction Model</div>
+                        ) : (
+                          <div 
+                            className="text-[#2C3E50] font-semibold opacity-70 cursor-pointer"
+                            onClick={() => handleFolderClick('epl-prophet')}
+                          >
+                            EPL Prophet - ML Prediction Model
+                          </div>
                         )}
                       </div>
                     </div>
@@ -388,16 +335,6 @@ export const Resume = () => {
                   {/* Tandem App Folder */}
                   <div className="relative">
                     <div className="relative">
-                      {/* Folder Tab - Matches folder color */}
-                      <div className="absolute -top-6 right-8 z-10">
-                        <div 
-                          className="bg-[#F0F0E8] border-l-4 border-t-4 border-r-4 border-[#2C3E50] rounded-t-lg px-6 py-2 shadow-lg cursor-pointer hover:bg-[#F0F0E8]/90 transition-colors duration-200"
-                          onClick={() => handleFolderClick('tandem-app')}
-                        >
-                          <span className="text-[#2C3E50] font-semibold text-sm">Tandem App</span>
-                        </div>
-                      </div>
-                      
                       {/* Folder Body */}
                       <div className={`bg-[#F0F0E8] rounded-lg shadow-2xl border-4 border-[#2C3E50] transition-all duration-500 ease-out ${
                         openFolder === 'tandem-app' 
@@ -406,13 +343,13 @@ export const Resume = () => {
                       }`}>
                         
                         {/* Folder Content */}
-                        <div className={`transition-all duration-700 ease-out overflow-hidden ${
+                        <div className={`transition-all duration-500 ease-out overflow-hidden ${
                           openFolder === 'tandem-app' 
-                            ? 'max-h-96 opacity-100 p-6' 
-                            : 'max-h-16 opacity-60 p-4'
+                            ? 'max-h-96 opacity-100 p-8' 
+                            : 'max-h-16 opacity-70 p-4'
                         }`}>
                           
-                          {openFolder === 'tandem-app' && (
+                          {openFolder === 'tandem-app' ? (
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
                               <div className="space-y-4">
                                 <h4 className="text-2xl font-bold text-[#2C3E50] mb-3">Tandem App</h4>
@@ -435,10 +372,13 @@ export const Resume = () => {
                                 />
                               </div>
                             </div>
-                          )}
-                          
-                          {openFolder !== 'tandem-app' && (
-                            <div className="text-[#2C3E50] font-semibold opacity-70">Tandem App - Language Learning Platform</div>
+                          ) : (
+                            <div 
+                              className="text-[#2C3E50] font-semibold opacity-70 cursor-pointer"
+                              onClick={() => handleFolderClick('tandem-app')}
+                            >
+                              Tandem App - Language Learning Platform
+                            </div>
                           )}
                         </div>
                       </div>
@@ -448,16 +388,6 @@ export const Resume = () => {
                   {/* Vibe Coding Folder */}
                   <div className="relative">
                     <div className="relative">
-                      {/* Folder Tab - Matches folder color */}
-                      <div className="absolute -top-6 left-16 z-10">
-                        <div 
-                          className="bg-[#F0F0E8] border-l-4 border-t-4 border-r-4 border-[#2C3E50] rounded-t-lg px-6 py-2 shadow-lg cursor-pointer hover:bg-[#F0F0E8]/90 transition-colors duration-200"
-                          onClick={() => handleFolderClick('vibe-coding')}
-                        >
-                          <span className="text-[#2C3E50] font-semibold text-sm">Vibe Coding</span>
-                        </div>
-                      </div>
-                      
                       {/* Folder Body */}
                       <div className={`bg-[#F0F0E8] rounded-lg shadow-2xl border-4 border-[#2C3E50] transition-all duration-500 ease-out ${
                         openFolder === 'vibe-coding' 
@@ -466,13 +396,13 @@ export const Resume = () => {
                       }`}>
                         
                         {/* Folder Content */}
-                        <div className={`transition-all duration-700 ease-out overflow-hidden ${
+                        <div className={`transition-all duration-500 ease-out overflow-hidden ${
                           openFolder === 'vibe-coding' 
-                            ? 'max-h-96 opacity-100 p-6' 
-                            : 'max-h-16 opacity-60 p-4'
+                            ? 'max-h-96 opacity-100 p-8' 
+                            : 'max-h-16 opacity-70 p-4'
                         }`}>
                           
-                          {openFolder === 'vibe-coding' && (
+                          {openFolder === 'vibe-coding' ? (
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
                               <div className="space-y-4">
                                 <h4 className="text-2xl font-bold text-[#2C3E50] mb-3">Vibe Coding</h4>
@@ -495,10 +425,13 @@ export const Resume = () => {
                                 />
                               </div>
                             </div>
-                          )}
-                          
-                          {openFolder !== 'vibe-coding' && (
-                            <div className="text-[#2C3E50] font-semibold opacity-70">Vibe Coding - Web Development Business</div>
+                          ) : (
+                            <div 
+                              className="text-[#2C3E50] font-semibold opacity-70 cursor-pointer"
+                              onClick={() => handleFolderClick('vibe-coding')}
+                            >
+                              Vibe Coding - Web Development Business
+                            </div>
                           )}
                         </div>
                       </div>
@@ -508,16 +441,6 @@ export const Resume = () => {
                   {/* Portfolio Site Folder - Bottom */}
                   <div className="relative">
                     <div className="relative">
-                      {/* Folder Tab - Matches folder color */}
-                      <div className="absolute -top-6 right-16 z-10">
-                        <div 
-                          className="bg-[#F0F0E8] border-l-4 border-t-4 border-r-4 border-[#2C3E50] rounded-t-lg px-6 py-2 shadow-lg cursor-pointer hover:bg-[#F0F0E8]/90 transition-colors duration-200"
-                          onClick={() => handleFolderClick('portfolio-site')}
-                        >
-                          <span className="text-[#2C3E50] font-semibold text-sm">Portfolio Site</span>
-                        </div>
-                      </div>
-                      
                       {/* Folder Body */}
                       <div className={`bg-[#F0F0E8] rounded-lg shadow-2xl border-4 border-[#2C3E50] transition-all duration-500 ease-out ${
                         openFolder === 'portfolio-site' 
@@ -526,13 +449,13 @@ export const Resume = () => {
                       }`}>
                         
                         {/* Folder Content */}
-                        <div className={`transition-all duration-700 ease-out overflow-hidden ${
+                        <div className={`transition-all duration-500 ease-out overflow-hidden ${
                           openFolder === 'portfolio-site' 
-                            ? 'max-h-96 opacity-100 p-6' 
-                            : 'max-h-16 opacity-60 p-4'
+                            ? 'max-h-96 opacity-100 p-8' 
+                            : 'max-h-16 opacity-70 p-4'
                         }`}>
                           
-                          {openFolder === 'portfolio-site' && (
+                          {openFolder === 'portfolio-site' ? (
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
                               <div className="space-y-4">
                                 <h4 className="text-2xl font-bold text-[#2C3E50] mb-3">Portfolio Site</h4>
@@ -540,7 +463,7 @@ export const Resume = () => {
                                   This very website! Built with React, TypeScript, and Tailwind CSS featuring 
                                   interactive timeline, RPG-style skill dashboard, and responsive design.
                                 </p>
-                                <div className="inline-flex items-center px-4 py-2 bg-[#2C3E50] text-[#F0F0E8] rounded-lg">
+                                <div className="inline-flex items-center px-4 py-2 bg-[#7A9CA9] text-[#F0F0E8] rounded-lg">
                                   <span>You're Here!</span>
                                   <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -555,10 +478,13 @@ export const Resume = () => {
                                 />
                               </div>
                             </div>
-                          )}
-                          
-                          {openFolder !== 'portfolio-site' && (
-                            <div className="text-[#2C3E50] font-semibold opacity-70">Portfolio Site - This Website</div>
+                          ) : (
+                            <div 
+                              className="text-[#2C3E50] font-semibold opacity-70 cursor-pointer"
+                              onClick={() => handleFolderClick('portfolio-site')}
+                            >
+                              Portfolio Site - This Website
+                            </div>
                           )}
                         </div>
                       </div>
@@ -570,13 +496,19 @@ export const Resume = () => {
             </div>
           </div>
 
+        {/* Gradient Separator */}
+        <div className="h-4 bg-gradient-to-r from-[#2C3E50] via-[#7A9CA9] to-[#2C3E50]"></div>
+
         {/* Videogame Style Skills Dashboard */}
         <div className="mt-32">
           <h3 className="text-3xl font-semibold text-[#7A9CA9] mb-12 text-center">
             Character Stats & Skills
           </h3>
           
-          <div className="bg-gradient-to-r from-[#2C3E50] to-[#1A252F] py-20 px-4">
+          {/* Gradient Separator */}
+          <div className="h-4 bg-gradient-to-r from-[#2C3E50] via-[#7A9CA9] to-[#2C3E50] mb-8"></div>
+          
+          <div className="bg-[#2C3E50] py-20 px-4">
             <div className="max-w-7xl mx-auto">
               <h3 className="text-3xl font-bold text-[#F0F0E8] text-center mb-4">
                 Character Stats & Skills
@@ -1114,19 +1046,6 @@ export const Resume = () => {
             </div>
           </div>
 
-        {/* Skills section at bottom */}
-        <div className="mt-20">
-          <h3 className="text-2xl font-semibold text-[#7A9CA9] mb-6 text-center">
-            Additional Skills & Interests
-          </h3>
-          <div className="bg-[#243447] p-8 rounded-xl shadow-lg">
-            <div className="bg-[#1E2A3B] p-6 rounded-lg">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {skillCategories.map(renderSkillCategory)}
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
       </div>
       </div>

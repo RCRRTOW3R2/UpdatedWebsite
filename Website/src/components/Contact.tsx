@@ -51,6 +51,17 @@ export const Contact = () => {
             </svg>
           </a>
           <a
+            href="https://www.goodreads.com/user/show/179854658-diego-mart-nez"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#7A9CA9] hover:text-[#F0F0E8] transition-colors"
+            aria-label="Goodreads"
+          >
+            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M3 3v18h18V3H3zm16 16H5V5h14v14zM7 7h10v2H7V7zm0 4h10v2H7v-2zm0 4h7v2H7v-2z"/>
+            </svg>
+          </a>
+          <a
             href="documents/RESUME.pdf"
             target="_blank"
             rel="noopener noreferrer"
