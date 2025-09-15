@@ -1,6 +1,6 @@
 export const Contact = () => {
   return (
-    <section id="contact" className="py-20 bg-[#2C3E50]">
+    <section id="contact" className="py-20 bg-gradient-to-b from-[#1A252F] to-[#0F1419]">
       <div className="max-w-3xl mx-auto px-4 text-center">
         <h2 className="text-3xl font-bold text-[#F0F0E8] mb-12">
           Let's get In Touch

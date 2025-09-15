@@ -3,7 +3,7 @@ import Typewriter from 'typewriter-effect';
 
 export const Hero = () => {
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#2C3E50] to-[#2C3E50]/90">
+    <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#5D7491] to-[#4A6378]">
       <div className="max-w-6xl mx-auto px-4 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Image */}
