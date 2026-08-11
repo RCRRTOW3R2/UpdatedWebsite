@@ -62,7 +62,7 @@ export const Contact = () => {
             </svg>
           </a>
           <a
-            href="documents/RESUME.pdf"
+            href="Website/public/documents/RESUME10062025.docx.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="text-[#7A9CA9] hover:text-[#F0F0E8] transition-colors"
